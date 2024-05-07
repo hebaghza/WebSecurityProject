@@ -68,7 +68,7 @@
         $view_transaction_button = '';
         $add_admin_button = '';
         $transfer_button = '<a href="transfer.php" class="action-button">Transfer Money</a>';
-        $add_money_button = '<a href="addmoney.php" class="action-button">Add Money</a>';
+        $add_money_button = '<a href="add_money.php" class="action-button">Add Money</a>';
         $password_button = '<a href="change_pass.php" class="action-button">Change The password</a>';
         $phone_button = '<a href="change_phone.php" class="action-button">Change The phone number</a>';
     }

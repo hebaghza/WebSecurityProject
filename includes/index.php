@@ -115,12 +115,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<meta property="og:title" content=""/>
 	<meta property="og:image" content=""/>
 	<meta property="og:url" content=""/>
-	<meta property="og:site_name" content=""/>
 	<meta property="og:description" content=""/>
 	<meta name="twitter:title" content="" />
 	<meta name="twitter:image" content="" />
 	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
+
 
 	<!-- <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet"> -->
 	
@@ -162,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				<div class="col-md-12 text-right gtco-contact">
 					<ul class="">
 						<li><a href="tel://966595372380"><i class="ti-mobile"></i> +966595372380 </a></li>
-						<li><a href="https://www.twitter.com'"><i class="ti-twitter-alt"></i> </a></li>
+						<li><a href="https://www.twitter.com"><i class="ti-twitter-alt"></i> </a></li>
 						<li><a href="mailto:comPaySwift@gmail.com"><i class="icon-mail2"></i></a></li>
 						<li><a href="https://www.facebook.com"><i class="ti-facebook"></i></a></li>
 					</ul>

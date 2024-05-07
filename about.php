@@ -18,12 +18,11 @@
     <meta property="og:title" content=""/>
     <meta property="og:image" content=""/>
     <meta property="og:url" content=""/>
-    <meta property="og:site_name" content=""/>
     <meta property="og:description" content=""/>
     <meta name="twitter:title" content="" />
     <meta name="twitter:image" content="" />
     <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
+
 
     <!-- <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet"> -->
     
@@ -120,10 +119,10 @@
             
         <div class="row">
             <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                <h3><strong style="color: #4CAF50;">Our Vision</strong></h3>
+                <h3><strong style="color: #203354;">Our Vision</strong></h3>
                 <p>To be the most innovative and trusted financial solutions partner.</p>
                 <br><br>
-                <h3><strong style="color: #4CAF50;">Our Mission</strong></h3>
+                <h3><strong style="color: #203354;">Our Mission</strong></h3>
                 <p>To help people, organizations and society achieve their aspirations being their trusted and caring financial solutions partner.</p>
                 
             </div>
@@ -136,7 +135,7 @@
         <div class="gtco-container">
             <div class="row animate-box">
                 <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
-                    <h2 style="color: #4CAF50;">Meet The Team</h2>
+                    <h2 style="color: #203354;">Meet The Team</h2>
 
                 </div>
             </div>

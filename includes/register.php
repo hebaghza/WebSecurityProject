@@ -155,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         .btn-group {
             display: inline-block;
-            margin-right: 10px; /* Adjust spacing between buttons */
+            margin-right: 10px; 
         }
     </style>
    
@@ -323,7 +323,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             function isValidPassword(password) {
                 // Add password validation logic here
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password); // Example: At least 6 characters, one uppercase letter, one lowercase letter, one number, and one special character
+                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password); //  At least 6 characters, one uppercase letter, one lowercase letter, one number, and one special character
             }
         });
     </script>

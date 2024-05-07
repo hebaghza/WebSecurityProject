@@ -53,13 +53,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newBalanceRecipient = $row['Balance'] + $amount;
 
             // Deduct the amount from the sender's balance
-            // Fetch the current balance of the sender
             $get_sender_balance_sql = "SELECT Balance FROM users WHERE UserID = ?";
             $get_sender_balance_stmt = $conn->prepare($get_sender_balance_sql);
             $get_sender_balance_stmt->bind_param("s", $userID);
             $get_sender_balance_stmt->execute();
             $get_sender_balance_result = $get_sender_balance_stmt->get_result();
-
+            
+            // Fetch the current balance of the sender
             if ($get_sender_balance_result->num_rows === 1) {
                 $sender_row = $get_sender_balance_result->fetch_assoc();
                 $currentSenderBalance = $sender_row['Balance'];
