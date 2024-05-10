@@ -33,6 +33,7 @@
             margin-bottom: 20px;
         }
         
+
         /* Style for the buttons */
         .action-button {
             display: inline-block;
@@ -72,20 +73,11 @@
 
 </head>
 
-
-
 <body>
 
-    <h2>All Users Transaction</h2>
-
-    <form action="account.php" method="post">
-        <input type="submit" value="Go Back">
-    </form>
-    <form action="logout.php" method="post">
-        <input type="submit" value="Logout">
-    </form>
 
     <div class="container">
+    <h2>All Users Transaction</h2>
         <table>
             <tr>
                 <th>Transaction ID</th>
@@ -96,6 +88,7 @@
             </tr>
             <?php
             include('includes/db_connection.php');
+            include('includes/csrftoken.php');
 
             $sql = "SELECT * FROM transactions";
             $result = $conn->query($sql);
@@ -116,7 +109,21 @@
             $conn->close();
             ?>
         </table>
+
+        <form action="account.php" method="post" style="display: inline-block;">  <button type="submit" class="action-button">Go Back</button>
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+        </form>
+
+        <form action="logout.php" method="post" style="display: inline-block;">  <button type="submit" class="action-button">Logout</button>
+        </form>
+
+
+            
+
     </div>
+    
+
+  
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

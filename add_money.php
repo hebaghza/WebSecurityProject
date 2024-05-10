@@ -1,7 +1,17 @@
 <?php
 // Start the session
-session_start();
+//session_start();
+include('includes/csrftoken.php');
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+        // CSRF token is missing or incorrect, handle the error (e.g., log, display error message, deny request)
+        // Example: Redirect user to an error page
+        header('Location: error.php');
+        exit();
+    }
+    // Proceed with processing form data
+}
 // If the user is not logged in, redirect them to the login page
 if (!isset($_SESSION['phone'])) {
     header("Location: login.php");
@@ -128,8 +138,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
+  
+    <div class="container">
     <h2>Add Money</h2>
-
     <form id="chargeForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="cardName">Name on Card:</label>
         <input type="text" id="cardName" name="cardName" placeholder="Enter your name" required><br>
@@ -146,14 +157,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" placeholder="Enter amount" required><br>
 
+        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
         <input type="submit" value="Charge Card">
     </form>
     <form action="account.php" method="post">
         <input type="submit" value="Go Back">
+        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
     </form>
     <form action="logout.php" method="post">
         <input type="submit" value="Logout">
+        <!-- <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>"> -->
+
     </form>
+
+    </div>
+
     <div id="chargeStatus" style="color: green;">
         <?php
         if (isset($chargeSuccess)) {
@@ -163,6 +183,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         ?>
     </div>
+
+    <script>
+        // Automatically format expiry date input
+        const expiryInput = document.getElementById('expiryDate');
+
+        expiryInput.addEventListener('input', function(event) {
+            const inputLength = event.target.value.length;
+            const maxLength = 5; // MM/YY format
+
+            if (inputLength === 2 && event.inputType !== 'deleteContentBackward') {
+                event.target.value += '/';
+            }
+
+            if (inputLength > maxLength) {
+                event.target.value = event.target.value.slice(0, maxLength);
+            }
+        });
+    </script>
 
 </body>
 

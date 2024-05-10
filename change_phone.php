@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('includes/csrftoken.php');
 require_once "includes/db_connection.php"; // Include your database connection file
 
 // Check if user is logged in
@@ -15,7 +15,12 @@ $old_phone_err = $new_phone_err = $confirm_phone_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+        // CSRF token is missing or incorrect, handle the error (e.g., log, display error message, deny request)
+        // Example: Redirect user to an error page using JavaScript
+        echo "<script>window.location.href = 'error.php';</script>";
+        exit();
+    }
     // Validate old phone number
     $old_phone = trim($_POST["oldPhone"]);
     $new_phone = trim($_POST["newPhone"]);
@@ -162,9 +167,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <span class="error"><?php echo $confirm_phone_err; ?></span><br>
 
             <input type="submit" value="Change Phone Number">
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
         </form>
         <form action="account.php" method="post">
         <input type="submit" value="Go Back">
+        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
         </form>
         <form action="logout.php" method="post">
         <input type="submit" value="Logout">

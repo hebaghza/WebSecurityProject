@@ -1,5 +1,6 @@
 <?php
 include('db_connection.php');
+include('csrftoken.php');
 
 // Define variables and initialize with empty values
 $new_phone = $new_national_id = $new_password = $confirm_password = $new_first_name = $new_last_name = "";
@@ -7,6 +8,12 @@ $new_phone_err = $new_national_id_err = $new_password_err = $confirm_password_er
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+        // CSRF token is missing or incorrect, handle the error (e.g., log, display error message, deny request)
+        // Example: Redirect user to an error page
+        header('Location: error.php');
+        exit();
+    }
 
     // Validate new phone number
     if (empty(trim($_POST["new_phone"]))) {
@@ -134,8 +141,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         /* Basic styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: rgba(29, 43, 83, 0.89);
+            font-family: "Roboto", sans-serif;
+            background-color: #17B794;
+            background: rgb(211, 211, 211);
+            background-color: rgba(29, 43, 83, 0.89);
         }
 
         .container {
@@ -209,14 +219,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
             <span class="error" id="confirmPasswordError"><?php echo $confirm_password_err; ?></span><br> 
 
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
             <input type="submit" value="Add Admin">
         </form>
 
         <form action="../account.php" method="post">
-        <input type="submit" value="Go Back">
+            <input type="submit" value="Go Back">
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
         </form>
+
         <form action="../logout.php" method="post">
-        <input type="submit" value="Logout">
+            <input type="submit" value="Logout">
         </form>
         
 

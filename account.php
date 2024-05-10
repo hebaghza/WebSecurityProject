@@ -56,7 +56,18 @@
 </head>
 
 <?php
-    session_start();
+    include('includes/csrftoken.php');
+    
+    // Validate CSRF token
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+            // CSRF token is missing or incorrect, handle the error
+            // For example, redirect user to an error page
+            header('Location: error.php');
+            exit();
+        }
+        // Proceed with processing form data
+    }
     if ($_SESSION['role'] == 'admin') {
         $view_transaction_button = '<a href="view.php" class="action-button">View Transaction</a>';
         $add_admin_button = '<a href="includes/add_admin.php" class="action-button">Add Admin</a>';

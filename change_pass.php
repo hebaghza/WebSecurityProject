@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('includes/csrftoken.php');
 require_once "includes/db_connection.php"; // Include your database connection file
 
 // Check if user is logged in
@@ -15,7 +15,12 @@ $old_password_err = $new_password_err = $confirm_password_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+        // CSRF token is missing or incorrect, handle the error (e.g., log, display error message, deny request)
+        // Example: Redirect user to an error page using JavaScript
+        echo "<script>window.location.href = 'error.php';</script>";
+        exit();
+    }
     // Validate old password
     $old_password = trim($_POST["oldPass"]);
     $new_password = trim($_POST["newPass"]);
@@ -185,9 +190,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <span class="error"><?php echo $confirm_password_err; ?></span><br>
 
             <input type="submit" value="Change Password">
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
         </form>
         <form action="account.php" method="post">
         <input type="submit" value="Go Back">
+        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
         </form>
     </div>
 
