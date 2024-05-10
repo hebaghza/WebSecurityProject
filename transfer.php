@@ -21,9 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    if (empty(trim($_POST["recipientPhoneNumber"]))) {
+    if (!preg_match("/^\d{10}$/", trim($_POST["recipientPhoneNumber"]))) {
+        $phone_err = "Invalid phone number format. Please enter 10 digits.";
+      } elseif (empty(trim($_POST["recipientPhoneNumber"]))) {
         $phone_err = "Please enter recipient's phone number.";
-    } else {
+      } else {
         $recipientPhoneNumber = trim($_POST["recipientPhoneNumber"]);
     }
 
@@ -43,7 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows === 0) {
             // Recipient's phone number not found, return error
             http_response_code(400); // Bad Request
-            echo json_encode(["error" => "Recipient's phone number not found"]);
+            echo json_encode(["phone_err" => "Recipient's phone number not found."]);
+            $phone_err = "Recipient's phone number not found.";
             exit;
         } else {
             $row = $result->fetch_assoc();
@@ -173,6 +176,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: red;
         }
     </style>
+
+<span class="error" id="server_phone_err"><?php echo $phone_err; ?></span>
+
+
 </head>
 <body>
 
@@ -205,42 +212,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#transferForm').submit(function (event) {
-                event.preventDefault(); // Prevent form submission
-                var recipientPhoneNumber = $('#recipientPhoneNumber').val();
-                var amount = $('#amount').val();
-                var token = $('input[name="_token"]').val(); // Get the CSRF token value
-                $.ajax({
-                    type: 'POST',
-                    url: 'transfer.php',
-                    data: {
-                        recipientPhoneNumber: recipientPhoneNumber,
-                        amount: amount,
-                        _token: token
-                    },
-                    dataType: 'json', // Expect JSON response
-                    success: function (response) {
-                        if (response.hasOwnProperty('phone_err')) {
-                            $('#phone_err').html(response.phone_err);
-                        }
-                        if (response.hasOwnProperty('amount_err')) {
-                            $('#amount_err').html(response.amount_err);
-                        }
-                        if (response.hasOwnProperty('error')) {
-                            $('#transferStatus').html('<p class="error">' + response.error + '</p>');
-                        }
-                        if (response.hasOwnProperty('success')) {
-                            $('#transferStatus').html('<p>' + response.success + '</p>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle AJAX errors here
-                        console.error(xhr.responseText);
+    $(document).ready(function () {
+        $('#transferForm').submit(function (event) {
+            event.preventDefault(); // Prevent form submission
+            var recipientPhoneNumber = $('#recipientPhoneNumber').val();
+            var amount = $('#amount').val();
+            var token = $('input[name="_token"]').val(); // Get the CSRF token value
+            $.ajax({
+                type: 'POST',
+                url: 'transfer.php',
+                data: {
+                    recipientPhoneNumber: recipientPhoneNumber,
+                    amount: amount,
+                    _token: token
+                },
+                dataType: 'json', // Expect JSON response
+                success: function (response) {
+                    if (response.hasOwnProperty('amount_err')) {
+                        $('#amount_err').html(response.amount_err);
+                    } else if (response.hasOwnProperty('error')) {
+                        $('#transferStatus').html('<p class="error">' + response.error + '</p>');
+                    } else if (response.hasOwnProperty('success')) {
+                        $('#transferStatus').html('<p>' + response.success + '</p>');
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    // Handle AJAX errors here
+                    console.error(xhr.responseText);
+                    // Display error message in transferStatus
+                    $('#transferStatus').html('<p class="error"> Recipient phone number not found </p>');
+                }
             });
         });
-    </script>
+
+        // Additionally, handle form submission in case JavaScript is disabled
+        $('#transferForm').on('submit', function() {
+            // If JavaScript is disabled, this function will handle form submission
+            return validateForm();
+        });
+
+        function validateForm() {
+            // Perform form validation here
+            // If validation fails, return false to prevent form submission
+            // If validation succeeds, return true to allow form submission
+        }
+    });
+</script>
+
 </body>
 </html>

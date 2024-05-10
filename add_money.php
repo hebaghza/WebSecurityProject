@@ -133,55 +133,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
 
-  
     <div class="container">
-    <h2>Add Money</h2>
-    <form id="chargeForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="cardName">Name on Card:</label>
-        <input type="text" id="cardName" name="cardName" placeholder="Enter your name" required><br>
+        <h2>Add Money</h2>
+        <form id="chargeForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <label for="cardName">Name on Card:</label>
+            <input type="text" id="cardName" name="cardName" placeholder="Enter your name" required><br>
 
-        <label for="cardNumber">Card Number:</label>
-        <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter card number" required><br>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter card number" required><br>
 
-        <label for="expiryDate">Expiry Date:</label>
-        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required><br>
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required><br>
 
-        <label for="cvv">CVV:</label>
-        <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required><br>
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" required><br>
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" placeholder="Enter amount" required><br>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" placeholder="Enter amount" required><br>
 
+            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+
+            <input type="submit" value="Charge Card">
+        </form>
+
+        <form action="account.php" method="post">
+            <input type="submit" value="Go Back">
         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
 
-        <input type="submit" value="Charge Card">
-    </form>
-    <form action="account.php" method="post">
-        <input type="submit" value="Go Back">
-        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
+        </form>
+        <form action="logout.php" method="post">
+            <input type="submit" value="Logout">
+            <!-- <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>"> -->
 
-    </form>
-    <form action="logout.php" method="post">
-        <input type="submit" value="Logout">
-        <!-- <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>"> -->
+        </form>
 
-    </form>
+        <div id="chargeStatus">
+            <!-- Display error message -->
+            <?php if (isset($chargeError)) : ?>
+                <p class="error-message"><?php echo $chargeError; ?></p>
+            <?php endif; ?>
 
-    </div>
+            <!-- Display success message -->
+            <?php if (isset($chargeSuccess)) : ?>
+                <p class="success-message"><?php echo $chargeSuccess; ?></p>
+            <?php endif; ?>
+        </div>
 
-    <div id="chargeStatus" style="color: green;">
-        <?php
-        if (isset($chargeSuccess)) {
-            echo $chargeSuccess;
-        } elseif (isset($chargeError)) {
-            echo '<p>' . $chargeError . '</p>';
-        }
-        ?>
+        <!-- Other forms -->
+        <!-- Your existing other forms -->
     </div>
 
     <script>
