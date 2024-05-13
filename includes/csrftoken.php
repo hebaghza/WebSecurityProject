@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Check if session is already active
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Start the session if it's not already active
+}
 
 // Generate CSRF token if not already generated
 if (!isset($_SESSION['_token'])) {
