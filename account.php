@@ -73,7 +73,7 @@
      // Check if 'role' key is set in $_SESSION
      $role = isset($_SESSION['role']) ? $_SESSION['role'] : null;
 
-    if ($_SESSION['role'] == 'admin') {
+    if ($role == 'admin') {
         $view_transaction_button = '<a href="view.php" class="action-button">View Transaction</a>';
         $add_admin_button = '<a href="includes/add_admin.php" class="action-button">Add Admin</a>';
         $transfer_button = '';

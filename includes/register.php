@@ -1,6 +1,6 @@
 <?php
 include('db_connection.php');
-
+include('csrftoken.php'); 
 // Define variables and initialize with empty values
 $new_phone = $new_national_id = $new_password = $confirm_password = $new_first_name = $new_last_name = "";
 $new_phone_err = $new_national_id_err = $new_password_err = $confirm_password_err = $new_first_name_err = $new_last_name_err = "";
@@ -8,6 +8,12 @@ $new_phone_err = $new_national_id_err = $new_password_err = $confirm_password_er
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    if (!isset($_POST['_token']) || $_POST['_token'] !== $_SESSION['_token']) {
+        // CSRF token validation failed, return error
+        http_response_code(400); // Bad Request
+        echo json_encode(["error" => "CSRF token validation failed"]);
+        exit();
+    }
     // Validate new phone number
     if (empty(trim($_POST["new_phone"]))) {
         $new_phone_err = "Please enter a phone number.";
@@ -106,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt->execute()) {
                 // Redirect to login page
-                header("location: ../account.php");
+                header("location: ../includes/login.php");
             } else {
                 echo "Something went wrong. Please try again later.";
             }
@@ -207,6 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="error" id="confirmPasswordError"><?php echo $confirm_password_err; ?></span><br> 
                                 
                                 <input type="submit" value="Register" class="btn btn-white btn-lg btn-outline">
+                                <input type="hidden" name="_token" value="<?php echo $_SESSION['_token']; ?>">
                             </form>
 
                             <h2 class="animate-box" data-animate-effect="fadeInUp" style="color: white">Have an Account?</h2>
